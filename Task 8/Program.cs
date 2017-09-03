@@ -8,9 +8,61 @@ namespace Task_8
 {
     class Program
     {
+        static void GeneratorTests(out int[,] GraphA, out int[,] GraphB, out int n)
+        {
+            Random a = new Random();
+            n = a.Next(2, 11);
+            GraphA = new int[n, n];
+            Console.WriteLine("Граф А:");
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i == j)
+                        GraphA[i, j] = 0;
+                    else if (i < j)
+                        GraphA[i, j] = a.Next(2);
+                    else GraphA[i, j] = GraphA[j, i];
+                    Console.Write("{0} ", GraphA[i, j]);
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Граф B:");
+            GraphB = new int[n, n];
+            int[] peak = new int[n];
+            for (int i = 0; i < n; i++)
+                peak[i] = -1;
+            for (int i = 0; i < n; i++)
+                while (true)
+                {
+                    int place = a.Next(n);
+                    if (peak[place] == -1)
+                    {
+                        peak[place] = i;
+                        break;
+                    }
+                }
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    GraphB[i, j] = GraphA[peak[i], peak[j]];
+                    Console.Write("{0} ", GraphB[i, j]);
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("Ожидаемый результат:");
+            for (int i = 0; i < n; i++)
+                Console.Write("{0} ", peak[i] + 1);
+            Console.WriteLine();
+        }
+
+
+
+
         static bool NextPermutation(ref int[] a)
         {
-            if (a.Length == 0) return false;
             for (var n = a.Length - 1; ;)
             {
                 var n1 = n;
@@ -33,56 +85,20 @@ namespace Task_8
 
         static void Main(string[] args)
         {
-            //Console.WriteLine("Введите количество вершин графов");
-            int n = 8;
-            int[,] GraphA =
-                { {0, 0, 0, 0, 1, 1, 1, 0 },
-                  {0, 0, 0, 0, 1, 1, 0, 1 },
-                  {0, 0, 0, 0, 1, 0, 1, 1 },
-                  {0, 0, 0, 0, 0, 1, 1, 1 },
-                  {1, 1, 1, 0, 0, 0, 0, 0 },
-                  {1, 1, 0, 1, 0, 0, 0, 0 },
-                  {1, 0, 1, 1, 0, 0, 0, 0 },
-                  {0, 1, 1, 1, 0, 0, 0, 0 } };
-
-            int[,] GraphB =
-                { {0, 1, 0, 1, 1, 0, 0, 0 },
-                  {1, 0, 1, 0, 0, 1, 0, 0 },
-                  {0, 1, 0, 1, 0, 0, 1, 0 },
-                  {1, 0, 1, 0, 0, 0, 0, 1 },
-                  {1, 0, 0, 0, 0, 1, 0, 1 },
-                  {0, 1, 0, 0, 1, 0, 1, 0 },
-                  {0, 0, 1, 0, 0, 1, 0, 1 },
-                  {0, 0, 0, 1, 1, 0, 1, 0 } };
-            // Ввод матриц смежности
-            //for (int i = 0; i < n; i++)
-            //{
-            //    Console.WriteLine("Введите {0}ю строку графа А", i + 1);
-            //    string[] num = Console.ReadLine().Split(' ');
-            //    for (int j = 0; j < num.Length; j++)
-            //        GraphA[i, j] = int.Parse(num[j]);
-            //}
-
-            //for (int i = 0; i < n; i++)
-            //{
-            //    Console.WriteLine("Введите {0}ю строку графа B", i + 1);
-            //    string[] num = Console.ReadLine().Split(' ');
-            //    for (int j = 0; j < num.Length; j++)
-            //        GraphB[i, j] = int.Parse(num[j]);
-            //}
-
+            int[,] GraphA, GraphB;
+            int n;
+            GeneratorTests(out GraphA, out GraphB, out n);
             int[,] graph = new int[n, n];
-
 
             int[] a = new int[n];
             for (int i = 0; i < n; i++)
                 a[i] = i;
+
             bool por = false;
             while (!por)
             {
                 por = true;
                 bool ok = NextPermutation(ref a);
-                if (!ok) break;
                 for (int i = 0; i < n; i++)
                     for (int j = 0; j < n; j++)
                     {
@@ -93,31 +109,16 @@ namespace Task_8
 
             for (int i = 0; i < n; i++)
                 Console.Write("{0} ", a[i] + 1);
+            Console.WriteLine();
+
+            Console.WriteLine("Измененный граф: ");
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                    Console.Write("{0} ", graph[i, j]);
+                Console.WriteLine();
+            }
             Console.ReadLine();
         }
-
-
-
-
-        //    for (int k = n - 2; k >= 0; k--)
-        //    {
-        //        int n1 = k + 1;
-        //        if (a[k] < a[n1])
-        //        {
-        //            int m = n - 1;
-        //            while (a[k] >= a[m]) m--;
-        //            int t = a[k]; a[k] = a[m]; a[m] = t;
-        //            Array.Reverse(a, n1, n - n1);
-        //        }
-        //        if (k == 0)
-        //        {
-        //            Array.Reverse(a);
-        //            break;
-        //        }
-        //    }
-
-        //        
-        //    
-        //    }
     }
 }
