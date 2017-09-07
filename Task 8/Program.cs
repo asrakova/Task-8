@@ -84,12 +84,16 @@ namespace Task_8
             {
                 int n = index;
                 index--;
+                // Находим два идущих поряд числа по возрастанию, index - одно из чисел для перестановок
                 if (peak[index] < peak[n])
                 {
+                    // Находим второе число для перестановки, число меньшее первого найденного
                     int m = peak.Length - 1;
                     while (peak[index] >= peak[m])
                         m--;
+                    // Выполняем перестановку
                     int t = peak[index]; peak[index] = peak[m]; peak[m] = t;
+                    // При необходимости, возвращаем числа после перестановки в исходный порядок
                     Array.Reverse(peak, n, peak.Length - n);
                     return true;
                 }
